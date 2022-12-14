@@ -2,6 +2,7 @@ package com.nfcat.qqbot.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nfcat.qqbot.data.ErrorType;
+import com.nfcat.qqbot.data.PostType;
 import com.nfcat.qqbot.listener.Heartbeat;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
