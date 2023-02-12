@@ -58,19 +58,21 @@ public abstract class SocketRecvUtil implements Runnable {
 
                 @Override
                 public void onMessage(String message) {
-                    try {
-                        JSONObject jsonObject = JSONObject.parseObject(message);
-                        switch (jsonObject.getString("post_type")){
-                            case "meta_event"->{
-                                switch (jsonObject.getString("meta_event_type")){
-                                    case "heartbeat"-> heartbeat.updateState(jsonObject.getInteger("self_id"));
-                                    default -> SocketRecvUtil.this.onMessage(jsonObject);
-                                }
+                    JSONObject jsonObject = JSONObject.parseObject(message);
+                    if (jsonObject == null) {
+                        SocketRecvUtil.this.onError(ErrorType.JSON_FORMAT_ERROR, message, null);
+                        return;
+                    }
+                    String postType = jsonObject.getString("post_type");
+                    postType = postType == null ? "other" : postType;
+                    switch (postType) {
+                        case "meta_event" -> {
+                            switch (jsonObject.getString("meta_event_type")) {
+                                case "heartbeat" -> heartbeat.updateState(jsonObject.getInteger("self_id"));
+                                default -> SocketRecvUtil.this.onMessage(jsonObject);
                             }
-                            default -> SocketRecvUtil.this.onMessage(jsonObject);
                         }
-                    } catch (Exception e) {
-                        SocketRecvUtil.this.onError(ErrorType.JSON_FORMAT_ERROR, message, e);
+                        default -> SocketRecvUtil.this.onMessage(jsonObject);
                     }
                 }
 

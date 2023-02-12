@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.handshake.ServerHandshake;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 @Slf4j
 public class APP {
     public static void main(String[] args) {
@@ -19,7 +21,19 @@ public class APP {
 
             @Override
             public void onMessage(JSONObject json) {
+                //打印全部信息
                 System.out.println(json);
+                String message = json.getString("message");
+                //如果收到你好回复你也好
+                if ("你好".equals(message)) {
+                    send(JSONObject.toJSONString(Map.of(
+                            "action","send_private_msg",
+                            "params",Map.of(
+                                    "user_id", json.getString("user_id"),
+                                    "message","你也好"
+                            )
+                    )));
+                }
             }
 
             @Override
