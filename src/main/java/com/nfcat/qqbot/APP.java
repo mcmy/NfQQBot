@@ -24,7 +24,7 @@ public class APP {
                 //打印全部信息
                 System.out.println(json);
                 String message = json.getString("message");
-                //如果收到你好回复你也好
+                //如果收到你好对其私聊回复你也好
                 if ("你好".equals(message)) {
                     send(JSONObject.toJSONString(Map.of(
                             "action","send_private_msg",
